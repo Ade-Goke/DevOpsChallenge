@@ -1,0 +1,33 @@
+name: CI Pipeline
+
+on:
+ pull_request:
+   branches:
+    - develop
+    - staging
+
+jobs:
+  ci:
+    name: Install > Lint > Test > Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint (ESLint)
+        run: npm run lint
+
+      - name: Tests (Jest)
+        run: CI=true npm run test
+
+      - name: Build
+        run: npm run build
